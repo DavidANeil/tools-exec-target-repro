@@ -1,0 +1,26 @@
+load("//:defs.bzl", "compile_files")
+
+
+compile_files(
+    name = "first",
+    srcs = ["src/file1"],
+    tool = ":normal_compiler",
+)
+
+sh_binary(
+    name = "normal_compiler",
+    srcs = ["compiler.sh"],
+)
+
+
+sh_binary(
+    name = "wrapped_compiler",
+    srcs = ["compiler.sh"],
+    data = [":first"],
+)
+
+compile_files(
+    name = "second",
+    srcs = ["src/file2"],
+    tool = ":wrapped_compiler"
+)
